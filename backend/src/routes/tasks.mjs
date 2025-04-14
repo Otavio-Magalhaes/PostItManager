@@ -85,9 +85,9 @@ router.patch("/api/tasks/update/:id", checkAuth, async (request, response)=>{
             return response.status(404).send({ msg: "A tarefa não foi encontrada." });
         }
         return response.status(200).send(updatedTask);
-     
+      
     }catch(err){
-        return response.status(401).send(err)
+        return response.status(500).send(err)
     }
 })
  

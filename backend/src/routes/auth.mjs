@@ -3,6 +3,13 @@ import passport from "passport";
 import "../strategies/local-strategy.mjs"
 import "../strategies/google-strategy.mjs"
 import {checkAuth} from "../middlewares/checkAuth.mjs"
+import { checkSchema, matchedData, validationResult } from "express-validator";
+import bcrypt from "bcrypt"
+import { User } from "../mongoose/schemas/user.mjs";
+import {ValidateUser} from "../utils/validationSchemas.mjs"
+
+
+
 const router = Router();
 
 router.post("/api/auth", passport.authenticate("local"),(request,response)=>{
@@ -16,6 +23,8 @@ router.post("/api/auth", passport.authenticate("local"),(request,response)=>{
           lastName: user.lastName
         }})
 }) 
+
+router.post("/api/auth/loginLocal",)
 
 router.get("/api/auth/me", checkAuth, async (request, res) => {
     res.status(200).json({ id: request.user.id, name: request.user.name });
@@ -55,6 +64,24 @@ router.get("/api/auth/facebook/callback",
   (request, response)=>{
     response.status(200).redirect("http://localhost:5173/board")
   
+})
+
+
+router.post("/api/auth/register/jwt",checkSchema(ValidateUser), async(request, response)=>{
+  const result = validationResult(request)
+  if(!result.isEmpty) return response.status(400).send(result.array())
+
+  const data = matchedData(request)
+  const hashedPassword = await bcrypt.hash(data.password, 10)
+  data.password = hashedPassword
+  const newUser = new User(data)
+
+  try{
+    const sabedUser = await newUser.save()
+    return response.status(201).send({msg: "Created User"})
+  }catch(err){
+    return response.status(300).send(`Error ${err}`)
+  }
 })
 
 

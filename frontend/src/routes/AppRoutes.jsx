@@ -6,14 +6,24 @@ import Board from "../pages/Board"
 import Home from "../pages/Home"
 // criar pagina not found
 import PrivateRoute from "../components/PrivateRoute"
+import PublicRoute from "../components/PublicRoute"
 
 
 export default function AppRoutes(){
     return(
         <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/singup" element={ <Signup/> }/>
+            //nao acho necessario colocar o PublicRoute, porem se precisar so inserir o element abaixo.
+            <Route path="/" >
+                <Route index element={<Home/>}/>
+            </Route>
+
+            <Route path="/login" element= {<PublicRoute/>}>
+                <Route index element={<Login/>}/>
+            </Route>
+            <Route path="/singup" element= {<PublicRoute/>}>
+                <Route index element={ <Signup/> }/>
+            </Route>
+
             <Route path="/board" element={ <PrivateRoute/> }>
                 <Route index element={ <Board/> }/>
             </Route>

@@ -121,3 +121,27 @@ export const ValidateTask = {
 
 
 }
+
+export const ValidateBoard = {
+  title: {
+    isString: {
+      errorMessage: "Por favor, preencha o campo título com um texto entre 5 e 50 caracteres."
+    },
+    isLength: {
+      options: {
+        min: 5,
+        max: 50
+      },
+      errorMessage: "Por favor, preencha o campo título com um texto entre 5 e 50 caracteres."
+    },
+    notEmpty: {
+      errorMessage: "Por favor, preencha o campo título."
+    },
+  },
+  description: {
+    optional: true,
+    isString: {
+      errorMessage: "O Campo Descrição precisa ser texto"
+    },
+  },
+}
