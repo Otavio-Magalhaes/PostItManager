@@ -12,7 +12,7 @@ export default passport.use(
             const findUser = await User.findOne({email});
 
             if(!findUser) throw new Error("Usuario nao encontrado")
-
+            console.log(findUser)
             if(findUser.password !== password) throw new Error("Senha Incorreta!")
 
             done(null,findUser)

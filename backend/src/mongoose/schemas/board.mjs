@@ -28,6 +28,13 @@ const boardSchema = new Schema(
         ref: 'Task', 
       },
     ],
+    project: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project', 
+        required: true
+      },
+    ]
   },
   { timestamps: true }
 );

@@ -18,6 +18,7 @@ router.get("/api/tasks",checkAuth, async (request,response)=>{
         return response.status(400).send(err)
     }
 })
+
 router.get("/api/tasks/stats", checkAuth, async(request,response)=>{
     try{
         const userId = request.user.id
@@ -59,7 +60,7 @@ router.get("/api/tasks/:id", checkAuth, async(request,response)=>{
 
 
 
-router.post("/api/tasks/create", checkAuth, checkSchema(ValidateTask), async (request,response)=>{
+router.post("/api/tasks", checkAuth, checkSchema(ValidateTask), async (request,response)=>{
     const result = validationResult(request)
     if(!result.isEmpty()) return response.status(400).send(result.array())
     const data = matchedData(request)
@@ -75,7 +76,7 @@ router.post("/api/tasks/create", checkAuth, checkSchema(ValidateTask), async (re
 })
 
 
-router.patch("/api/tasks/update/:id", checkAuth, async (request, response)=>{
+router.patch("/api/tasks/:id", checkAuth, async (request, response)=>{
     try{
         const {id} = request.params
         const body = request.body

@@ -3,7 +3,6 @@ import { type } from "os";
 
 const  {Schema} = mongoose
 
-//criando o schema de usuario, so sera cadastrado o usuario que tiver nesse formato.
 const facebookUserSchema = new Schema({
     facebookId:{
         type: String,

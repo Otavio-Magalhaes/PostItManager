@@ -2,7 +2,7 @@ import { Router } from "express";
 import tasksRoutes from "./tasks.mjs"
 import usersRoutes from "./users.mjs"
 import authRoute from "./auth.mjs"
-import boardsRoute from "./board.mjs"
+import boardsRoute from "./boards.mjs"
 
 
 const router = Router()

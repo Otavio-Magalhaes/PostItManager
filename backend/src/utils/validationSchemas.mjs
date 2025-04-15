@@ -89,15 +89,15 @@ export const ValidateTask = {
         min: 5,
         max: 300
       },
-      errorMessage: "O Titulo precisa ter entre 5 e 300 caracteres"
+      errorMessage: "O Campo Descricao precisa ter entre 5 e 300 caracteres"
     },
   },
   status: {
     isString: {
-      errorMessage: "O Status color precisa ser texto"
+      errorMessage: "O Campo Status precisa ser texto"
     },
     notEmpty: {
-      errorMessage: "O Campo firstName precisa ser Marcado"
+      errorMessage: "O Campo status precisa ser Marcado"
     },
   },
   color: {
@@ -144,4 +144,37 @@ export const ValidateBoard = {
       errorMessage: "O Campo Descrição precisa ser texto"
     },
   },
+}
+
+export const ValidateProject = {
+  title: {
+    isString: {
+      errorMessage: "Por favor, preencha o campo título com um texto entre 5 e 50 caracteres."
+    },
+    isLength: {
+      options: {
+        min: 5,
+        max: 50
+      },
+      errorMessage: "Por favor, preencha o campo título com um texto entre 5 e 50 caracteres."
+    },
+    notEmpty: {
+      errorMessage: "O Campo Titulo precisa ser preenchido"
+    },
+  },
+  description: {
+    optional: true,
+    isString: {
+      errorMessage: "O Campo Descrição precisa ser texto"
+    },
+  },
+  status: {
+    isString: {
+      errorMessage: "O Status precisa ser texto"
+    },
+    notEmpty: {
+      errorMessage: "O Campo status precisa ser Marcado"
+    },
+  },
+  
 }

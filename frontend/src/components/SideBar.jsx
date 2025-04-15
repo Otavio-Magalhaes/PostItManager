@@ -54,7 +54,7 @@ export default function Sidebar() {
         <div className="relative z-10 p-4 flex flex-col items-center">
           <div className="flex items-center space-x-3">
             <FaRegUser className="text-2xl text-[#3a3a3a]" />
-            <h1 className="text-lg font-semibold text-[#3a3a3a]">User Name</h1>
+            <h1 className="text-lg font-semibold text-[#3a3a3a]">Lorem Ipsum</h1>
           </div>
           <button className="mt-4 w-full bg-[#7f833a] text-white py-2 rounded-lg hover:bg-[#747652] flex items-center justify-center space-x-2">
             <span>+ Criar Quadro</span>
@@ -114,8 +114,8 @@ export default function Sidebar() {
           <div className="mt-4 flex items-center space-x-3 px-3 py-2 rounded-lg">
             <FaRegUser className="text-2xl text-[#3a3a3a]" />
             <div>
-              <p className="text-sm font-semibold">Nome Do Usuario</p>
-              <p className="text-xs text-[#6b6b6b]">user@email.com.br</p>
+              <p className="text-sm font-semibold">Lorem Ipsum</p>
+              <p className="text-xs text-[#6b6b6b]">loremIpsum@email.com.br</p>
             </div>
           </div>
         </div>

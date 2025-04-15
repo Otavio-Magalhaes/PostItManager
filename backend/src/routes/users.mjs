@@ -6,7 +6,7 @@ import {User} from "../mongoose/schemas/user.mjs"
 
 const router = Router()
 
-router.post("/api/users/create", checkSchema(ValidateUser), async (request,response)=>{
+router.post("/api/users/", checkSchema(ValidateUser), async (request,response)=>{
    //validationResult valida os dados do request, caso ache erro ele aloca em result, se nao tiver erro result e vazio.
     const result = validationResult(request)
     if(!result.isEmpty()) return response.status(400).send(result.array())
