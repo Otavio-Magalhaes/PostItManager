@@ -62,7 +62,7 @@ export const ValidateUser = {
 
 
 export const ValidateTask = {
-  titulo: {
+  title: {
     isString: {
       errorMessage: "O Campo Titulo precisa ser texto"
     },
@@ -77,7 +77,7 @@ export const ValidateTask = {
       errorMessage: "O Campo Titulo precisa ser preenchido"
     },
   },
-  descricao: {
+  description: {
     isString: {
       errorMessage: "O Campo Descrição precisa ser texto"
     },
@@ -117,10 +117,18 @@ export const ValidateTask = {
     notEmpty: {
       errorMessage: "O Campo Y precisa ser preenchido"
     },
+  },
+  board:{
+    notEmpty: {
+      errorMessage: "a Task precisa estar vinculada a um board existente"
+    },
   }
 
 
 }
+
+
+
 
 export const ValidateBoard = {
   title: {
@@ -144,6 +152,12 @@ export const ValidateBoard = {
       errorMessage: "O Campo Descrição precisa ser texto"
     },
   },
+  project:{
+    notEmpty: {
+      errorMessage: "o Projeto não foi passado"
+    },
+
+  }
 }
 
 export const ValidateProject = {
@@ -167,14 +181,5 @@ export const ValidateProject = {
     isString: {
       errorMessage: "O Campo Descrição precisa ser texto"
     },
-  },
-  status: {
-    isString: {
-      errorMessage: "O Status precisa ser texto"
-    },
-    notEmpty: {
-      errorMessage: "O Campo status precisa ser Marcado"
-    },
-  },
-  
+  }  
 }

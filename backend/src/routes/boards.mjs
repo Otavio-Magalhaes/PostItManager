@@ -1,9 +1,11 @@
-import { response, Router } from "express"
 import mongoose from "mongoose"
+import {Router } from "express"
 import { checkAuth } from "../middlewares/checkAuth.mjs"
 import { checkSchema, matchedData, validationResult } from "express-validator"
 import { ValidateBoard } from "../utils/validationSchemas.mjs"
 import Board from "../mongoose/schemas/board.mjs"
+import Project from "../mongoose/schemas/project.mjs"
+import Task  from "../mongoose/schemas/tasks.mjs"
 import checkBodyBoard from "../middlewares/checkBodyBoard.mjs"
 
 const router = Router()
@@ -13,8 +15,11 @@ router.post("/api/boards", checkAuth, checkSchema(ValidateBoard), async (request
   if (!result.isEmpty()) return response.status(400).send(result.array())
   const data = matchedData(request)
   const userId = request.user.id
+
+  console.log(data.project)
   
-  const projectExist = await Projects.findById(data.projectId)
+  const projectExist = await Project.findById(data.project)
+  console.log(projectExist)
   if(!projectExist) return response.status(404).json({msg: "Passe um projeto valido para a criacao do board."})
 
   const newBoard = new Board({
@@ -22,10 +27,9 @@ router.post("/api/boards", checkAuth, checkSchema(ValidateBoard), async (request
     description: data.description,
     owner: userId,
     members: [userId],
-    tasks: [],
-    project: data.projectId
+    project: data.project
   })
-  
+ 
   try {
     const savedBoard = await newBoard.save()
     return response.status(201).json({ savedBoard })
@@ -55,12 +59,12 @@ router.get("/api/boards/:id", checkAuth, async (request, response) => {
     const { id } = request.params
     const userId = request.user.id
     const findBoard = await Board.findById(id)
+    const tasks = await Task.find({ board: id})
+    const findProject = await Project.findById(findBoard.project)
     if(!findProject) return response.status(404).send({msg: "Projeto não encontrado!"})
     if(!findBoard.members.includes(userId)) 
       return response.status(403).json({msg:"voce não tem permissão para acessar esse board"})
-
-
-    return response.status(200).send(findBoard)
+    return response.status(200).json({findBoard, tasks})
   } catch (err) {
     return response.status(500).send({msg: "Erro interno no Servidor"})
   }

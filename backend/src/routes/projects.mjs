@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { checkAuth } from "../middlewares/checkAuth.mjs";
+import mongoose from "mongoose";
 import Project from "../mongoose/schemas/project.mjs";
 import { ValidateProject } from "../utils/validationSchemas.mjs";
-import { matchedData, validationResult } from "express-validator";
+import { checkSchema, matchedData, validationResult } from "express-validator";
 import checkBodyProject from "../middlewares/checkBodyProject.mjs";
-import Project from "../mongoose/schemas/project.mjs";
+
 
 const router = Router()
 
@@ -12,8 +13,10 @@ router.get("/api/projects", checkAuth, async (request, response) => {
   const userID = request.user.id
   try {
     const findProjects = await Project.find({ members: userID, status: "ativo" })
-    if (!findProjects) response.status(400).json({ msg: "Este Usuario nao possui nenhum projeto ativo." })
-
+    if (findProjects.length === 0) {
+      return response.status(404).json({ msg: "Este usuário não possui nenhum projeto ativo." });
+    }
+    
     response.status(200).send(findProjects)
   } catch (err) {
     console.log(err);
@@ -21,7 +24,7 @@ router.get("/api/projects", checkAuth, async (request, response) => {
   }
 })
 
-router.get("/api/project/:id", checkAuth, async (request, response) => {
+router.get("/api/projects:id", checkAuth, async (request, response) => {
   try {
     const { id } = request.params
     const userID = request.user.id
@@ -37,9 +40,9 @@ router.get("/api/project/:id", checkAuth, async (request, response) => {
 
 
 
-router.post("/api/projects", checkAuth, ValidateProject, async (request, response) => {
+router.post("/api/projects", checkAuth, checkSchema(ValidateProject) , async (request, response) => {
   const result = validationResult(request)
-  if (!result.isEmpty()) response.status(400).send(result.array())
+  if (!result.isEmpty()) return response.status(400).send(result.array())
 
   const data = matchedData(request)
   const userID = request.user.id
@@ -51,10 +54,10 @@ router.post("/api/projects", checkAuth, ValidateProject, async (request, respons
     owner: userID,
     members: [userID]
   })
-
   try {
     const savedProject = await newProjet.save()
-    return response.status(201).json({ savedProject })
+    return response.status(201).send(savedProject)
+
   } catch (err) {
     return response.status(500).json({ msg: "Erro interno do servidor." })
   }
@@ -84,7 +87,7 @@ router.patch("/api/projects/:id", checkAuth, checkBodyProject, async (request, r
 
 })
 
-router.delete("/api/prokect/:id", checkAuth, async (request, response) => {
+router.delete("/api/projects/:id", checkAuth, async (request, response) => {
   try {
     const { id } = request.params
     const userId = request.user.id
@@ -99,14 +102,17 @@ router.delete("/api/prokect/:id", checkAuth, async (request, response) => {
       return response.status(401).json({ msg: "Você não tem autorização para Deletar o Projeto." })
 
     if (project.boards.length > 0) 
-      return response.status(400).json({ msg: "Delete todas os boads para conseguir deletar o Projeto." })
+      return response.status(400).json({ msg: "Delete todos os boads para conseguir deletar o Projeto." })
     
     const deletedProject = await Project.findByIdAndDelete(id)
    
    
-    return response.status(200).send(`O Board '${deletedProject.title}' foi deletado com sucesso`)
+    return response.status(200).send(`O Projeto '${deletedProject.title}' foi deletado com sucesso`)
   } catch (err) {
     console.error(err);
     return response.status(500).json({ msg: "Erro no servidor." });
   }
 })
+
+
+export default router
