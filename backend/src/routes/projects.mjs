@@ -81,5 +81,32 @@ router.patch("/api/projects/:id", checkAuth, checkBodyProject, async (request, r
   } catch (error) {
     return response.status(500).json({msg: "Erro no servidor"})
   }
+
 })
 
+router.delete("/api/prokect/:id", checkAuth, async (request, response) => {
+  try {
+    const { id } = request.params
+    const userId = request.user.id
+    if (!mongoose.Types.ObjectId.isValid(id)) 
+      return response.status(400).json({ msg: "ID do Board inválido." });
+
+    const project = await Project.findById(id)
+    if(!project) 
+      return response.status(404).json({msg:"Project não encontrado."})
+
+    if (userId !== project.owner) 
+      return response.status(401).json({ msg: "Você não tem autorização para Deletar o Projeto." })
+
+    if (project.boards.length > 0) 
+      return response.status(400).json({ msg: "Delete todas os boads para conseguir deletar o Projeto." })
+    
+    const deletedProject = await Project.findByIdAndDelete(id)
+   
+   
+    return response.status(200).send(`O Board '${deletedProject.title}' foi deletado com sucesso`)
+  } catch (err) {
+    console.error(err);
+    return response.status(500).json({ msg: "Erro no servidor." });
+  }
+})
