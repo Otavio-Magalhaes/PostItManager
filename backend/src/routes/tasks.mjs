@@ -1,8 +1,8 @@
-import { response, Router } from "express";
+import { Router } from "express";
 import {checkAuth} from "../middlewares/checkAuth.mjs"
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { ValidateTask } from "../utils/validationSchemas.mjs";
-import { Task } from "../mongoose/schemas/tasks.mjs";
+import  Task  from "../mongoose/schemas/tasks.mjs";
 import { appendFile } from "fs";
 import mongoose from "mongoose";
 
@@ -65,7 +65,16 @@ router.post("/api/tasks", checkAuth, checkSchema(ValidateTask), async (request,r
     if(!result.isEmpty()) return response.status(400).send(result.array())
     const data = matchedData(request)
     const userId = request.user.id
-    const newTask = new Task({...data, user: userId})
+    const newTask = new Task({
+        title: data.title,
+        description: data.description,
+        status: data.status,
+        user: userId,
+        x: data.x,
+        y: data.y,
+        color: data.color,
+        board: data.board
+    })
 
     try{
         const saveTask = await newTask.save()

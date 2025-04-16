@@ -4,11 +4,11 @@ const  {Schema} = mongoose
 
 //criando o schema de usuario, so sera cadastrado o usuario que tiver nesse formato.
 const taskSchema = new Schema({
-    titulo: {
+    title: {
         type: String,
         required: true,
     },
-    descricao: {
+    description: {
         type: String,
         required: true,
     },
@@ -32,9 +32,15 @@ const taskSchema = new Schema({
     color:{
         type: String,
         required: true
+    },
+    board:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Board",
+        required: true
     }
 
 
 }, { timestamps: true })
 
-export const Task =  mongoose.model("Task", taskSchema)
+const Task =  mongoose.model("Task", taskSchema)
+export default Task
