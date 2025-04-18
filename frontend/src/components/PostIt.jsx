@@ -1,14 +1,12 @@
 import React from "react";
 
 export default function PostIt({ data, onClick, onDragStart }) {
-  // Define um limite de caracteres para exibição no post-it
   const MAX_CONTENT_LENGTH = 75;
 
-  // Se o texto for maior que o limite, ele será cortado e receberá "..."
   const truncatedContent =
     data.length > MAX_CONTENT_LENGTH
-      ? data.descricao.slice(0, MAX_CONTENT_LENGTH) + "..."
-      : data.descricao;
+      ? data.description.slice(0, MAX_CONTENT_LENGTH) + "..."
+      : data.description;
 
   return (
     <div
@@ -50,7 +48,7 @@ export default function PostIt({ data, onClick, onDragStart }) {
       <span className="text-xs mt-2 block italic text-gray-700">
         {data.status === "pendente" ? "🔴 Pendente" : "✅ Concluído"}
       </span>
-      <h3 className="font-bold text-lg truncate">{data.titulo}</h3>
+      <h3 className="font-bold text-lg truncate">{data.title}</h3>
       <p className="text-sm overflow-hidden">{truncatedContent}</p>
     </div>
   );

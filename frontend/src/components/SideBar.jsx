@@ -5,11 +5,14 @@ import { BiLayer, BiFolder, BiDotsHorizontalRounded } from "react-icons/bi";
 import { PiUsers } from "react-icons/pi";
 import texture from "../assets/texture.jpg";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Sidebar() {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate()
   async function handleLogout(){
+    console.log(user)
     try{
       await fetch("http://localhost:3000/api/auth/logout",{
         method: "GET",
@@ -27,7 +30,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Botão de Menu Mobile */}
       <button
         className="fixed top-4 left-4 md:hidden bg-[#7f833a] p-2 rounded text-white z-50"
         onClick={() => setIsOpen(!isOpen)}
@@ -35,12 +37,10 @@ export default function Sidebar() {
         <FaBars className="text-xl" />
       </button>
 
-      {/* Sidebar */}
       <div
         className={`fixed md:relative h-screen w-64 bg-[#D4B99D] border-r border-[#A17D5E] shadow-lg flex flex-col 
         transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
-        {/* Textura de Fundo */}
         <div
           className="absolute inset-0 w-full h-full opacity-12 mix-blend-multiply pointer-events-none"
           style={{
@@ -50,39 +50,39 @@ export default function Sidebar() {
           }}
         ></div>
 
-        {/* Logo e botão de criação rápida */}
         <div className="relative z-10 p-4 flex flex-col items-center">
           <div className="flex items-center space-x-3">
             <FaRegUser className="text-2xl text-[#3a3a3a]" />
-            <h1 className="text-lg font-semibold text-[#3a3a3a]">Lorem Ipsum</h1>
+            <h1 className="text-lg font-semibold text-[#3a3a3a]">{ user?.name || "Carregando..."}</h1>
           </div>
           <button className="mt-4 w-full bg-[#7f833a] text-white py-2 rounded-lg hover:bg-[#747652] flex items-center justify-center space-x-2">
             <span>+ Criar Quadro</span>
           </button>
         </div>
 
-        {/* Menu de Navegação */}
         <nav className="relative z-10 flex-1 mt-4 px-4">
           <ul className="space-y-2 text-[#3a3a3a]">
             <li className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer">
               <MdDashboard className="text-xl" />
               <span>Dashboard</span>
             </li>
-            <li className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer">
+            <li 
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer"
+              onClick={() => navigate('/boardspage')}
+            >
               <BiLayer className="text-xl" />
               <span>Quadros</span>
             </li>
-            <li className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer">
+            <li 
+              className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer"
+              onClick={() => navigate('/projects')}
+            >
+              
               <BiFolder className="text-xl" />
               <span>Projetos</span>
             </li>
-            <li className="flex items-center space-x-3 px-3 py-2 rounded-lg border border-[#A17D5E] bg-[#e0c6a8]">
-              <PiUsers className="text-xl" />
-              <span>Times</span>
-            </li>
           </ul>
 
-          {/* Documentos */}
           <p className="mt-6 px-3 text-sm text-[#6b6b6b]">Documentos</p>
           <ul className="space-y-2 text-[#3a3a3a] px-4 mt-2">
             <li className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer">
@@ -96,7 +96,6 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        {/* Rodapé do menu */}
         <div className="relative z-10 p-4 border-t border-[#A17D5E]">
           <div className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer">
             <FaCog className="text-xl" />
@@ -114,14 +113,14 @@ export default function Sidebar() {
           <div className="mt-4 flex items-center space-x-3 px-3 py-2 rounded-lg">
             <FaRegUser className="text-2xl text-[#3a3a3a]" />
             <div>
-              <p className="text-sm font-semibold">Lorem Ipsum</p>
-              <p className="text-xs text-[#6b6b6b]">loremIpsum@email.com.br</p>
+              <p className="text-sm font-semibold">{user?.name || "Carregando..."}</p>
+              <p className="text-xs text-[#6b6b6b]">{user?.email || "Carregando..."}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Background para fechar o sidebar ao clicar fora */}
+
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"

@@ -3,44 +3,38 @@ import PostIt from "../components/PostIt";
 import PostItModal from "../components/PostItModal";
 import texture from "../assets/texture.jpg";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../components/SideBar";
 
 export default function Board() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { boardId } = useParams();
+
   const [postIts, setPostIts] = useState([]);
   const [selectedPostIt, setSelectedPostIt] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [postItToDelete, setPostItToDelete] = useState(null);
 
-  // Redireciona se não estiver logado
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
-
-  // Carrega as tasks do backend com token
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-  
-        const response = await fetch("http://localhost:3000/api/tasks", {
+        const response = await fetch(`http://localhost:3000/api/tasks/board/${boardId}`, {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // <- ESSENCIAL pra mandar o cookie da sessão
+          credentials: "include",
         });
 
         if (!response.ok) throw new Error("Erro ao buscar tarefas");
 
         const data = await response.json();
-  
         setPostIts(
           data.map((task) => ({
             id: task._id,
-            titulo: task.titulo,
-            descricao: task.descricao,
+            title: task.title,
+            description: task.description,
             color: task.color || "#FFD700",
             status: task.status ? "concluído" : "pendente",
             x: task.x || 100,
@@ -52,14 +46,13 @@ export default function Board() {
       }
     };
 
-    if (user) fetchTasks();
-  }, [user]);
+    if (user && boardId) fetchTasks();
+  }, [user, boardId]);
 
   const handleAddPostIt = () => {
     setSelectedPostIt({
-      id: Date.now(),
-      titulo: "",
-      descricao: "",
+      title: "",
+      description: "",
       color: "#FFD700",
       status: "pendente",
       x: 100,
@@ -69,42 +62,37 @@ export default function Board() {
 
   const handleSavePostIt = async (postIt) => {
     try {
-      const isEditing = !!postIt.id && typeof postIt.id === "string" && !postIt.id.toString().includes("Date");
+      const isEditing = !!postIt.id && typeof postIt.id === "string";
 
-      console.log(postIt)
-const response = await fetch(
-  isEditing
-    ? `http://localhost:3000/api/tasks/update/${postIt.id}`
-    : "http://localhost:3000/api/tasks/create",
-  {
-    method: isEditing ? "PATCH" : "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      titulo: postIt.titulo,
-      descricao: postIt.descricao,
-      color: postIt.color,
-      status: postIt.status,
-      x: postIt.x,
-      y: postIt.y,
-    }),
-  }
-);
-  
+      const response = await fetch(
+        isEditing
+          ? `http://localhost:3000/api/tasks/${postIt.id}`
+          : "http://localhost:3000/api/tasks/",
+        {
+          method: isEditing ? "PATCH" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            title: postIt.title,
+            description: postIt.description,
+            status: postIt.status,
+            color: postIt.color,
+            x: postIt.x,
+            y: postIt.y,
+            board: boardId,
+          }),
+        }
+      );
+
       if (!response.ok) throw new Error("Erro ao salvar post-it");
-  
+
       const savedTask = await response.json();
-  
+
       if (isEditing) {
-        // atualiza no estado
         setPostIts((prev) =>
-          prev.map((p) =>
-            p.id === postIt.id
-              ? { ...p, ...postIt } // atualiza o post-it com as novas infos
-              : p
-          )
+          prev.map((p) => (p.id === postIt.id ? { ...p, ...postIt } : p))
         );
       } else {
         const newPostIt = {
@@ -113,13 +101,45 @@ const response = await fetch(
         };
         setPostIts((prev) => [...prev, newPostIt]);
       }
-  
+
       setSelectedPostIt(null);
     } catch (error) {
       console.error("Erro ao salvar post-it:", error);
     }
   };
-  
+
+  const handleRequestDelete = (postIt) => {
+    setPostItToDelete(postIt);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!postItToDelete) return;
+    try {
+      const response = await fetch(`http://localhost:3000/api/tasks/${postItToDelete.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Erro ao deletar post-it");
+
+      setPostIts((prev) => prev.filter((p) => p.id !== postItToDelete.id));
+      setSelectedPostIt(null);
+    } catch (error) {
+      console.error("Erro ao deletar post-it:", error);
+    } finally {
+      setPostItToDelete(null);
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setPostItToDelete(null);
+    setShowDeleteConfirm(false);
+  };
 
   const handleDragStart = (event, id) => {
     setIsDragging(id);
@@ -152,7 +172,6 @@ const response = await fetch(
     <div className="flex">
       <Sidebar />
       <div className="relative w-full h-screen bg-[#D4B99D] overflow-hidden flex-1">
-        {/* Textura de fundo */}
         <div
           className="absolute inset-0 w-full h-full opacity-12 mix-blend-multiply pointer-events-none"
           style={{
@@ -162,7 +181,6 @@ const response = await fetch(
           }}
         ></div>
 
-        {/* Botão de criar post-it */}
         <button
           onClick={handleAddPostIt}
           className="relative w-20 h-20 mt-3 ml-6 flex items-center justify-center cursor-pointer"
@@ -182,7 +200,6 @@ const response = await fetch(
           </div>
         </button>
 
-        {/* Post-its */}
         {postIts.map((postIt) => (
           <PostIt
             key={postIt.id}
@@ -192,13 +209,36 @@ const response = await fetch(
           />
         ))}
 
-        {/* Modal */}
         {selectedPostIt !== null && (
           <PostItModal
             postIt={selectedPostIt}
             onSave={handleSavePostIt}
             onClose={() => setSelectedPostIt(null)}
+            onDelete={() => handleRequestDelete(selectedPostIt)}
           />
+
+        )}
+
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded-lg shadow-xl text-center space-y-4">
+              <h2 className="text-xl font-semibold">Deseja realmente deletar este post-it?</h2>
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Sim, deletar
+                </button>
+                <button
+                  onClick={cancelDelete}
+                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

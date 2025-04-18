@@ -4,6 +4,7 @@ import Login from "../pages/Login"
 import Signup from "../pages/SingUp"
 import Board from "../pages/Board"
 import Home from "../pages/Home"
+import BoardsPage from "../pages/BoardsPage"
 // criar pagina not found
 import PrivateRoute from "../components/PrivateRoute"
 import PublicRoute from "../components/PublicRoute"
@@ -23,11 +24,15 @@ export default function AppRoutes(){
             <Route path="/singup" element= {<PublicRoute/>}>
                 <Route index element={ <Signup/> }/>
             </Route>
-
-            <Route path="/board" element={ <PrivateRoute/> }>
-                <Route index element={ <Board/> }/>
+            
+            <Route path="/boardsPage" element={ <PrivateRoute/> }>
+                <Route index element={ <BoardsPage/> }/>
             </Route>
 
+
+            <Route path="/board/:boardId" element={ <PrivateRoute/> }>
+                <Route index element={ <Board/> }/>
+            </Route>
             {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
         

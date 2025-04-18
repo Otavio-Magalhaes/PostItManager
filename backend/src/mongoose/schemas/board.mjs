@@ -22,12 +22,6 @@ const boardSchema = new Schema(
         ref: 'User', 
       },
     ],
-    tasks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task', 
-      },
-    ],
     project: [
       {
         type: mongoose.Schema.Types.ObjectId,

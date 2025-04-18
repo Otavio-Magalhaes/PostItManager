@@ -27,7 +27,7 @@ router.post("/api/auth", passport.authenticate("local"),(request,response)=>{
 router.post("/api/auth/loginLocal",)
 
 router.get("/api/auth/me", checkAuth, async (request, res) => {
-    res.status(200).json({ id: request.user.id, name: request.user.name });
+    res.status(200).json({ id: request.user.id, name: request.user.firstName, email: request.user.email });
 });
 
 
