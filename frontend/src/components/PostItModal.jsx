@@ -2,37 +2,37 @@ import React, { useState } from "react";
 
 const PALETA_CORES = ["#F5E6C8", "#EBD9B4", "#BFD8AF", "#A7C7E7", "#E8A0BF"];
 
-export default function PostItModal({ postIt = {}, onSave, onClose }) {
-  const [titulo, setTitulo] = useState(postIt.titulo || "");
-  const [descricao, setDescricao] = useState(postIt.descricao || "");
+export default function PostItModal({ postIt = {}, onSave, onClose, onDelete }) {
+  const [title, setTitle] = useState(postIt.title || "");
+  const [description, setDescription] = useState(postIt.description || "");
   const [color, setColor] = useState(postIt.color || PALETA_CORES[0]);
   const [status, setStatus] = useState(postIt.status || "pendente");
 
   // Estados para erros
-  const [errors, setErrors] = useState({ titulo: "", descricao: "" });
+  const [errors, setErrors] = useState({ title: "", description: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validação dos campos
-    let newErrors = { titulo: "", descricao: "" };
+    let newErrors = { title: "", description: "" };
 
-    if (titulo.length < 5 || titulo.length > 32) {
-      newErrors.titulo = "O título deve ter entre 5 e 32 caracteres.";
+    if (title.length < 5 || title.length > 32) {
+      newErrors.title = "O título deve ter entre 5 e 32 caracteres.";
     }
 
-    if (descricao.length < 5 || descricao.length > 300) {
-      newErrors.descricao = "A descrição deve ter entre 5 e 300 caracteres.";
+    if (description.length < 5 || description.length > 300) {
+      newErrors.description = "A descrição deve ter entre 5 e 300 caracteres.";
     }
 
     // Se houver erro, não submeter
-    if (newErrors.titulo || newErrors.descricao) {
+    if (newErrors.title || newErrors.description) {
       setErrors(newErrors);
       return;
     }
 
     // Salvar e fechar modal
-    onSave({ ...postIt, titulo, descricao, color, status});
+    onSave({ ...postIt, title, description, color, status});
     onClose();
   };
 
@@ -45,32 +45,31 @@ export default function PostItModal({ postIt = {}, onSave, onClose }) {
           <input
             type="text"
             placeholder="Título"
-            value={titulo}
+            value={title}
             onChange={(e) => {
-              setTitulo(e.target.value);
-              setErrors({ ...errors, titulo: "" }); // Limpa erro ao digitar
+              setTitle(e.target.value);
+              setErrors({ ...errors, title: "" }); // Limpa erro ao digitar
             }}
             className={`w-full border p-2 mb-1 rounded ${
-              errors.titulo ? "border-red-500" : ""
+              errors.title ? "border-red-500" : ""
             }`}
             required
           />
-          {errors.titulo && <p className="text-red-500 text-sm mb-2">{errors.titulo}</p>}
+          {errors.title && <p className="text-red-500 text-sm mb-2">{errors.title}</p>}
 
-          {/* Textarea Descrição */}
           <textarea
             placeholder="Descrição"
-            value={descricao}
+            value={description}
             onChange={(e) => {
-              setDescricao(e.target.value);
-              setErrors({ ...errors, descricao: "" }); // Limpa erro ao digitar
+              setDescription(e.target.value);
+              setErrors({ ...errors, description: "" }); // Limpa erro ao digitar
             }}
             className={`w-full border p-2 mb-1 rounded ${
-              errors.descricao ? "border-red-500" : ""
+              errors.description ? "border-red-500" : ""
             }`}
             required
           />
-          {errors.descricao && <p className="text-red-500 text-sm mb-2">{errors.descricao}</p>}
+          {errors.description && <p className="text-red-500 text-sm mb-2">{errors.description}</p>}
 
           {/* Seletor de cores */}
           <div className="mb-2">
@@ -101,13 +100,18 @@ export default function PostItModal({ postIt = {}, onSave, onClose }) {
           </select>
 
           {/* Botões */}
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="p-2 bg-gray-500 text-white rounded">
-              Cancelar
+          <div className="flex justify-around">
+            <button ype="button" onClick={onDelete} className="p-2 bg-red-500 text-white rounded">
+              Deletar
             </button>
-            <button type="submit" className="p-2 bg-blue-500 text-white rounded">
-              Salvar
-            </button>
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={onClose} className="p-2 bg-gray-500 text-white rounded">
+                Cancelar
+              </button>
+              <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+                Salvar
+              </button>
+            </div>
           </div>
         </form>
       </div>

@@ -7,6 +7,8 @@ import texture from "../assets/texture.jpg";
 import loginImage from "../assets/login-image.png";
 import { useAuth } from "../../context/AuthContext";
 import {motion} from "framer-motion"
+
+
 export default function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ export default function Login() {
       console.log("Logado Com sucesso")
       console.log(result)
 
-      navigate("/board");
+      navigate("/boardspage");
     } catch (error) {
       setLoginError(error.message);
     }
@@ -48,7 +50,6 @@ export default function Login() {
 
   return (
     <div className="relative flex h-screen bg-[#D4B99D] overflow-hidden">
-      {/* Textura de fundo */}
       <div
         className="absolute inset-0 w-full h-full opacity-12 mix-blend-multiply pointer-events-none"
         style={{
@@ -89,7 +90,6 @@ export default function Login() {
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
 
-          {/* Exibir erro de login, se houver */}
           {loginError && <p className="text-red-500 text-xs text-center mb-2">{loginError}</p>}
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -149,7 +149,6 @@ export default function Login() {
         </motion.div>
       </motion.div>
 
-      {/* Área da imagem com animação */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
