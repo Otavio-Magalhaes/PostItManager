@@ -14,12 +14,12 @@ router.get("/api/projects", checkAuth, async (request, response) => {
   try {
     const findProjects = await Project.find({ members: userID, status: "ativo" })
     if (findProjects.length === 0) {
-      return response.status(404).json({ msg: "Este usuário não possui nenhum projeto ativo." });
+      return response.status(200).json([]);
     }
     
     response.status(200).send(findProjects)
   } catch (err) {
-    console.log(err);
+
     response.status(500).json({ msg: "Erro interno do Servidor" })
   }
 })

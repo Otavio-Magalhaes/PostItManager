@@ -60,8 +60,7 @@ router.get("/api/tasks/board/:boardId", checkAuth, async(request, response)=>{
     try{const {boardId} = request.params;
     const findBoard = await Board.findById(boardId)
     const userId = request.user.id
-    console.log(`Usuario logado: ${userId}`)
-    console.log(findBoard)
+
     if(userId !== String(findBoard.owner)) return response.status(401).json({msg: "Não Autorizado a acessar este board."})
     const tasks = await Task.find({board: findBoard.id})
     return response.status(200).send(tasks)

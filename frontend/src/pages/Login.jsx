@@ -39,10 +39,9 @@ export default function Login() {
       }
    
       setUser(result);
-      console.log("Logado Com sucesso")
-      console.log(result)
 
-      navigate("/boardspage");
+
+      navigate("/boards");
     } catch (error) {
       setLoginError(error.message);
     }

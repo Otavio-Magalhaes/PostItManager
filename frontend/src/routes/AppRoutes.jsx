@@ -8,6 +8,7 @@ import BoardsPage from "../pages/BoardsPage"
 // criar pagina not found
 import PrivateRoute from "../components/PrivateRoute"
 import PublicRoute from "../components/PublicRoute"
+import ProjectsPage from "../pages/ProjecsPage"
 
 
 export default function AppRoutes(){
@@ -25,9 +26,14 @@ export default function AppRoutes(){
                 <Route index element={ <Signup/> }/>
             </Route>
             
-            <Route path="/boardsPage" element={ <PrivateRoute/> }>
+            <Route path="/boards" element={ <PrivateRoute/> }>
                 <Route index element={ <BoardsPage/> }/>
             </Route>
+
+            <Route path="/projects" element={ <PrivateRoute/> }>
+                <Route index element={ <ProjectsPage/> }/>
+            </Route>
+
 
 
             <Route path="/board/:boardId" element={ <PrivateRoute/> }>

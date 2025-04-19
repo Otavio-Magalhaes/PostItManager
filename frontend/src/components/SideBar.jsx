@@ -12,7 +12,6 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate()
   async function handleLogout(){
-    console.log(user)
     try{
       await fetch("http://localhost:3000/api/auth/logout",{
         method: "GET",
@@ -68,7 +67,7 @@ export default function Sidebar() {
             </li>
             <li 
               className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-[#e0c6a8] cursor-pointer"
-              onClick={() => navigate('/boardspage')}
+              onClick={() => navigate('/boards')}
             >
               <BiLayer className="text-xl" />
               <span>Quadros</span>

@@ -16,10 +16,10 @@ router.post("/api/boards", checkAuth, checkSchema(ValidateBoard), async (request
   const data = matchedData(request)
   const userId = request.user.id
 
-  console.log(data.project)
+
   
   const projectExist = await Project.findById(data.project)
-  console.log(projectExist)
+
   if(!projectExist) return response.status(404).json({msg: "Passe um projeto valido para a criacao do board."})
 
   const newBoard = new Board({
@@ -45,7 +45,7 @@ router.get("/api/boards", checkAuth, async (request, response) => {
   try {
     const findBoards = await Board.find({ members: (userId) }).sort({ createdAt: -1 });
     if (findBoards.length === 0) {
-      return response.status(404).send("Nenhum board encontrado");
+      return response.status(200).json([]);
     }
     response.status(200).send(findBoards)
   } catch (err) {
@@ -116,7 +116,7 @@ router.delete("/api/boards/:id", checkAuth, async (request, response) => {
    
     return response.status(200).send(`O Board '${deletedBoard.title}' foi deletado com sucesso`)
   } catch (err) {
-    console.error(err);
+
     return response.status(500).json({ msg: "Erro no servidor." });
   }
 })
