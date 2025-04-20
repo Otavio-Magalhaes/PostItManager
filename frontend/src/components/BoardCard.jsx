@@ -9,7 +9,7 @@ export default function BoardCard({ board }) {
 
   return (
     <div 
-    className="rounded-xl shadow-md p-4 hover:shadow-lg transition cursor-pointer hover:bg-[#e0c6a8] hover:border-[#A17D5E] hover:border-1"
+    className="rounded-xl shadow-md p-4 bg-[#b39b81] border-2 border-[#83723a] hover:shadow-lg transition cursor-pointer hover:bg-[#e0c6a8] hover:border-[#A17D5E] hover:border-1"
     onClick={handleClick}
     >
       <h3 className="text-xl font-serif mb-2">{board.title}</h3>

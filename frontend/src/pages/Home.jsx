@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import FeaturesSection from '../components/FeatureSection';
-import CallToAction from '../components/CallToAction';
+import Footer from '../components/Footer';
 import texture from "../assets/texture.jpg"
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
             <HeroSection />
             <AboutSection />
             <FeaturesSection />
-            <CallToAction />
+            <Footer/>
         </div>
     );
 }
