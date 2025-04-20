@@ -24,7 +24,7 @@ router.post("/api/auth", passport.authenticate("local"),(request,response)=>{
         }})
 }) 
 
-router.post("/api/auth/loginLocal",)
+
 
 router.get("/api/auth/me", checkAuth, async (request, res) => {
     res.status(200).json({ id: request.user.id, name: request.user.firstName, email: request.user.email });
@@ -50,7 +50,7 @@ router.get("/api/auth/google", passport.authenticate("google") ,(request,respons
 router.get("/api/auth/google/callback", 
   passport.authenticate("google", { failureRedirect: 'http://localhost:5173/login' }), 
   (request, response)=>{
-    response.status(200).redirect("http://localhost:5173/board")
+    response.status(200).redirect("http://localhost:5173/boards")
   
 })
 
@@ -62,7 +62,7 @@ router.get("/api/auth/facebook", passport.authenticate("facebook") ,(request,res
 router.get("/api/auth/facebook/callback", 
   passport.authenticate("facebook", { failureRedirect: 'http://localhost:5173/login' }), 
   (request, response)=>{
-    response.status(200).redirect("http://localhost:5173/board")
+    response.status(200).redirect("http://localhost:5173/boards")
   
 })
 
