@@ -3,7 +3,7 @@ import { GoogleUser } from "../../mongoose/schemas/google-user.mjs";
 
 export function setupPassportSerialization(passport) {
     passport.serializeUser((user, done) => {
-        const userType = user.googleId ? "google" : "local";  // se tiver googleId, é do Google
+        const userType = user.googleId ? "google" : "local";  
         done(null, { id: user.id, type: userType });
     });
 

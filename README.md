@@ -6,7 +6,7 @@ Este projeto foi desenvolvido com foco em aprendizado.
 
 ✨ O design visual do sistema foi inspirado na estética encantadora dos filmes do Studio Ghibli, trazendo uma interface leve, criativa e agradável de usar.
 
-![Capa do projeto](./caminho-da-imagem.png)
+![Capa do projeto](./printsProject/home.png)
 
 ## 🚀 Funcionalidades
 
@@ -50,11 +50,14 @@ Este projeto foi desenvolvido com foco em aprendizado.
 
 ## 🖼 Prints do Projeto
 
-<img src="#">
-<img src="#">
-<img src="#">
-<img src="#">
-<img src="#">
+![Capa do projeto](./printsProject/home.png)
+![Pagina Login](./printsProject/login.png)
+![Pagina SingUp](./printsProject/singUp.png)
+![Pagina Boards](./printsProject/Boards.png)
+![Pagina Projects](./printsProject/projects.png)
+![Pagina Board com Tasks](./printsProject/board.png)
+![Modal criação Board](./printsProject/modalboard.png)
+![Modal criação postIt](./printsProject/modalPostIt.png)
 
 ---
 
